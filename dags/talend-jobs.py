@@ -1,0 +1,69 @@
+from airflow import DAG
+from datetime import datetime, timedelta
+from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.operators.email_operator import EmailOperator
+from airflow import configuration as conf
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2019, 1, 1),
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+}
+
+namespace = conf.get('kubernetes', 'NAMESPACE')
+
+# This will detect the default namespace locally and read the 
+# environment namespace when deployed to Astronomer.
+if namespace =='default':
+    config_file = '/usr/local/airflow/include/.kube/config'
+    in_cluster=False
+else:
+    in_cluster=True
+    config_file=None
+
+
+# Define recipient emails for successful completion notification
+email_to = ["kenten@astronomer.io"]
+
+with DAG('talend_jobs',
+          schedule_interval='@once',
+          default_args=default_args
+          ) as dag:
+
+    talend1 = KubernetesPodOperator(
+                namespace=namespace,
+                image="davidkoenitzer/talendjob:hello",
+                name="talend-test-hello",
+                task_id="hello-world",
+                in_cluster=in_cluster, # if set to true, will look in the cluster, if false, looks for file
+                cluster_context='docker-desktop', # is ignored when in_cluster is set to True
+                config_file=config_file,
+                is_delete_operator_pod=True,
+                get_logs=True
+                )
+
+    talend2 = KubernetesPodOperator(
+                namespace=namespace,
+                image="davidkoenitzer/talendjob:dropbox",
+                name="talend-test-random",
+                task_id="dropbox",
+                in_cluster=in_cluster,
+                cluster_context='docker-desktop', 
+                config_file=config_file,
+                is_delete_operator_pod=True,
+                get_logs=True
+                )
+
+    send_email = EmailOperator(
+                    task_id='send_email',
+                    to=email_to,
+                    subject='Talend Jobs Completed Successfully',
+                    html_content='<p>Your containerized Talend jobs have completed successfully. <p>'
+                )
+
+    
+    talend1 >> talend2 >> send_email
