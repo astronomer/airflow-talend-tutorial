@@ -29,7 +29,7 @@ else:
 # Define recipient emails for successful completion notification
 email_to = ["kenten@astronomer.io"]
 
-with DAG('talend_jobs',
+with DAG('talend_containerized_jobs',
           schedule_interval='@once',
           default_args=default_args
           ) as dag:
