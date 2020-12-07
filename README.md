@@ -1,20 +1,29 @@
-# talend-astronomer-tutorial
-This repo is home to a tutorial for how to use Astronomer+Airflow with Talend. It contains reference DAGs and other supporting materials needed for a presentation and demo.
+# airflow-talend-tutorial
+This repo contains an Astronomer project with two example DAGs showing how to use Airflow to execute Talend jobs. A guide discussing the DAGs and concepts in depth can be found [here](https://www.astronomer.io/guides/airflow-talend-integration).
 
 ## Tutorial Overview
-There are a few ways to execute Talend jobs with Airflow - containerizing the jobs and executing them with the KubernetesPodOperator, or executing the jobs via the Talend API using the SimpleHTTPSOperator, or something similar. This tutorial focuses on the former, since the later is only possible with a Talend Cloud enterprise account.
+There are a few main ways to execute Talend jobs with Airflow:
 
-An Airflow DAG that will execute published Talend jobs can be found in the `dags/` directory. The Talend jobs used in this tutorial are published to this public registry on docker hub: https://hub.docker.com/repository/docker/kentdanas/talend-astro-tutorial
+ - Containerize Talend Studio jobs and execute them using the KubernetesPodOperator
+ - Execute Talend Cloud jobs using the Talend API and the SimpleHttpsOperator
 
-Some brief introductory slides are saved here as well; they introduce the topic and set the stage for a demonstration with the Talend jobs and DAG. A written tutorial that can be sent out as needed can be found here: https://www.notion.so/astronomerio/Containerized-Talend-Jobs-on-Astronomer-f264beb82688434b8f07b0290664c0cb
-
+This tutorial has one DAG to illustrate each method.
 
 ## Requirements
-To follow this tutorial from scratch, including containerizing the Talend jobs, you must have the following installed locally:
+In addition to the Astronomer CLI, to follow this tutorial you will need the following:
 
-- Talend Studio
-- Docker
-- Astronomer CLI
+- A Talend Cloud account
+- Talend Studio installed locally
+- Docker installed locally
+- A Dockerhub account, or other Docker registry
 
+## Getting Started
+The easiest way to run these example DAGs is to use the Astronomer CLI to get an Airflow instance up and running locally:
 
-
+ 1. [Install the Astronomer CLI](https://www.astronomer.io/docs/cloud/stable/develop/cli-quickstart)
+ 2. Clone this repo somewhere locally and navigate to it in your terminal
+ 3. Initialize an Astronomer project by running `astro dev init`
+ 4. Start Airflow locally by running `astro dev start`
+ 5. Navigate to localhost:8080 in your browser and you should see the tutorial DAGs there
+ 
+Refer to the detailed guide linked above for instructions on how to get Airflow set up specifically for these DAGs. 
