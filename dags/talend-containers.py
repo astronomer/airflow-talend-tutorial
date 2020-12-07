@@ -27,7 +27,7 @@ else:
 
 
 # Define recipient emails for successful completion notification
-email_to = ["kenten@astronomer.io"]
+email_to = ["noreply@astronomer.io"]
 
 with DAG('talend_containerized_jobs',
           schedule_interval='@once',
@@ -36,7 +36,7 @@ with DAG('talend_containerized_jobs',
 
     talend1 = KubernetesPodOperator(
                 namespace=namespace,
-                image="davidkoenitzer/talendjob:hello",
+                image="yourregistry/talendjob:hello",
                 name="talend-test-hello",
                 task_id="hello-world",
                 in_cluster=in_cluster, # if set to true, will look in the cluster, if false, looks for file
@@ -48,7 +48,7 @@ with DAG('talend_containerized_jobs',
 
     talend2 = KubernetesPodOperator(
                 namespace=namespace,
-                image="davidkoenitzer/talendjob:dropbox",
+                image="yourregistry/talendjob:dropbox",
                 name="talend-test-random",
                 task_id="dropbox",
                 in_cluster=in_cluster,
