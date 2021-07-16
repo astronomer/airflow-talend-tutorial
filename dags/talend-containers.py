@@ -1,7 +1,7 @@
 from airflow import DAG
 from datetime import datetime, timedelta
-from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
-from airflow.operators.email_operator import EmailOperator
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
+from airflow.operators.email import EmailOperator
 from airflow import configuration as conf
 
 # This DAG uses the KubernetesPodOperator to execute Talend jobs. The Talend jobs are containerized,

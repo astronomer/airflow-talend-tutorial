@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.operators.http_operator import SimpleHttpOperator
+from airflow.providers.http.operators.http import SimpleHttpOperator
 from datetime import datetime, timedelta
 import json
 
