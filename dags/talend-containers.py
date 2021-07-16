@@ -4,6 +4,11 @@ from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOpera
 from airflow.operators.email_operator import EmailOperator
 from airflow import configuration as conf
 
+# This DAG uses the KubernetesPodOperator to execute Talend jobs. The Talend jobs are containerized,
+# saved to a registry, and then orchestrated from Airflow. For more information on how to containerize
+# Talend jobs, and when to use this method when working with Airflow, check out the guide here:
+# https://www.astronomer.io/guides/airflow-talend-integration
+
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
@@ -36,7 +41,7 @@ with DAG('talend_containerized_jobs',
 
     talend1 = KubernetesPodOperator(
                 namespace=namespace,
-                image="yourregistry/talendjob:hello",
+                image="yourregistry/talendjob:hello", # image with your containerized Talend job
                 name="talend-test-hello",
                 task_id="hello-world",
                 in_cluster=in_cluster, # if set to true, will look in the cluster, if false, looks for file
@@ -48,7 +53,7 @@ with DAG('talend_containerized_jobs',
 
     talend2 = KubernetesPodOperator(
                 namespace=namespace,
-                image="yourregistry/talendjob:dropbox",
+                image="yourregistry/talendjob:dropbox", # image with your containerized Talend job
                 name="talend-test-random",
                 task_id="dropbox",
                 in_cluster=in_cluster,
