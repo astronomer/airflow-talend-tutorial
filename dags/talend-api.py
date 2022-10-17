@@ -1,17 +1,22 @@
+"""
+This DAG uses the SimpleHttpOperator to execute Talend jobs via the Talend API.
+A Talend Cloud license is required in order to access the API.
+For more information on when to use this method when working with Airflow and Talend, check out the guide here:
+https://www.astronomer.io/guides/airflow-talend-integration
+
+"""
+
 from airflow import DAG
 from airflow.providers.http.operators.http import SimpleHttpOperator
 from datetime import datetime
 import json
 
-# This DAG uses the SimpleHttpOperator to execute Talend jobs via the Talend API.
-# A Talend Cloud license is required in order to access the API.
-# For more information on when to use this method when working with Airflow and Talend, check out the guide here:
-# https://www.astronomer.io/guides/airflow-talend-integration
 
 
 with DAG('talend_api_jobs',
     start_date=datetime(2019, 1, 1),
     schedule_interval='@once',
+    doc_md=__doc__,
     default_args={
         'email_on_failure': False,
         'email_on_retry': False,

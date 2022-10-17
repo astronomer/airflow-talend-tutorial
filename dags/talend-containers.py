@@ -1,13 +1,18 @@
+"""
+This DAG uses the KubernetesPodOperator to execute Talend jobs. The Talend jobs are containerized,
+saved to a registry, and then orchestrated from Airflow. For more information on how to containerize
+Talend jobs, and when to use this method when working with Airflow, check out the guide here:
+https://www.astronomer.io/guides/airflow-talend-integration
+"""
+
+
 from airflow import DAG
 from datetime import datetime
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow.operators.email import EmailOperator
 from airflow import configuration as conf
 
-# This DAG uses the KubernetesPodOperator to execute Talend jobs. The Talend jobs are containerized,
-# saved to a registry, and then orchestrated from Airflow. For more information on how to containerize
-# Talend jobs, and when to use this method when working with Airflow, check out the guide here:
-# https://www.astronomer.io/guides/airflow-talend-integration
+
 
 namespace = conf.get('kubernetes', 'NAMESPACE')
 
@@ -26,6 +31,7 @@ email_to = ["noreply@astronomer.io"]
 
 with DAG(
     'talend_containerized_jobs',
+    doc_md=__doc__,
     start_date=datetime(2019, 1, 1),
     schedule_interval='@once',
     default_args={
