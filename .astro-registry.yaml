@@ -1,0 +1,8 @@
+# These categories will be applied to all DAGs in the repo.
+categories:
+  - ETL/ELT
+  - Orchestration
+# List of DAGs that should be published to the Astronomer Registry.
+dags:
+  - path: dags/talend-api.py
+  - path: dags/talend-containers.py
