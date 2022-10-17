@@ -2,7 +2,6 @@
 categories:
   - ETL/ELT
   - Orchestration
-  - Containers
 # List of DAGs that should be published to the Astronomer Registry.
 dags:
   - path: dags/talend-api.py
